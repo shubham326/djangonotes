@@ -222,7 +222,7 @@ Syntax: {{variable|filter}}
 Example: {{app_name|upper}},  {{app_size|int}}
 #types
 {{app_name|upper}},
-{{article|truncateword:40}}
+{{article|truncateword:40}}   #truncateword means limiting the words
 {{article|upper|truncateword:40}}
 
 #builtin Filters
@@ -251,7 +251,7 @@ filter...............
     <h1> Here one key exist in dictionary </h1>
 {% endif %}
 {% if app_name and app_size %}
-    <h1> Here both keys are available in dictioary </h1>
+    <h1> Here both keys are available in dictionary </h1>
 {% endif %}
 
 
@@ -446,7 +446,66 @@ STATICFILES_DIRS = [STATIC_DIR]
 --------------------------------------------------------------------------------------------------------------
 -------------------------------------------------ORM----------------------------------------------------------
 
-design of django model and use of query set
+#design of django model and use of query set
+#orm-model
+#syntax 
+class model_name(models.Model):
+    field_name = models.FieldType(arg, options)                             #filed option (primary_key = True)
+    name = models.CharField(max_length=50, unique=True, primary_key=True)   #filed argument (max_length = 50)
+
+#Example
+from django.db import models
+from django.contrib.auth.models import AbstractUser
+from .manager import UserManager
+
+# specifying choices
+Roles = (
+    ("founder", "Founder"),
+    ("c", "C Suite"),
+    ("business_leader", "Business_leader"),
+    ("Manger", "Manager"),
+    ("Team_lead", "Team_lead"),
+)
+class skill(models.Model):
+    name = models.CharField(max_length=50)
+    def __str__(self):
+        return self.name
+
+class User(AbstractUser):
+    username = None 
+    email = models.EmailField(unique=True)
+    mobile = models.CharField(max_length=14)        #in CharFiled length is required
+    Company_Name = models.CharField(max_length=100)
+    company_website = models.URLField(max_length=100)
+    work_build = models.CharField(max_length=100, choices=work, default='Select')
+    Role = models.CharField(max_length=50, choices=Roles, default='Find Your Role')
+    industry = models.CharField(max_length=100, choices=industry, default='Industry')
+    team_member = models.CharField(max_length=50, choices=Employees, default='Find Your Role')
+
+    objects = UserManager()
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
+    def __str__(self):
+        return self.username
+
+#migrations
+1. showmigartions :to display status of changes in models
+>>>>>python manage.py showmigartions
+2. makemigrations :use to convert model class into sql statements
+    and also create a file contains all sql statements(0001), located in application.
+>>>>>python manage.py makemigrations
+3. migrate :to execute sql commands and to create table in database.
+>>>>>python manage.py migrate
+4. sqlmigrate :to display sql statements
+>>>>>python manage.py sqlmigrate app_name migration_filename(0001)
+
+#QuerySet
+All objects created in django models
+queryset allow to read the data from the database, filter it and order it.
+user.objects.all()
+users.objects.get(id=9)
+users.objects.get(id=69)
+users.objects.filter(name="shubham")
 
 
 
@@ -478,14 +537,18 @@ design of django model and use of query set
 
 
 
-
-
-
-
-
-
-
-
+*************************************************************************************************************
+*************************************************************************************************************
+*************************************************************************************************************
+*************************************************************************************************************
+**************************************************************************************************************************************************************************************************************************
+*************************************************************************************************************
+*************************************************************************************************************
+*************************************************************************************************************
+*************************************************************************************************************
+*************************************************************************************************************
+*************************************************************************************************************
+*************************************************************************************************************
 --------------------------------------------------------------------------------------------------------------
 ------------------------------------------Cookies and Caches--------------------------------------------------
 
@@ -504,7 +567,8 @@ stores : identity, login info, cart info, address info, ip info, location, add_i
 -----------------------------------------------ManytoMany Relation--------------------------------------------
 
 #for choosing multiple option at a time          <!--multiple skills for user-->
-#model.py 
+#manytomany relation model-settings 
+from django.db import models
 class skill(models.Model):
     name = models.CharField(max_length=50)
 
@@ -535,3 +599,17 @@ class candidateAdmin(admin.ModelAdmin):
         return "\n".join([p.name for p in obj.skills.all()]) 
 <!--Here {name = name of using primary-model CharField} and {obj.skills.all = field name of ManytoMany }-->
 
+*************************************************************************************************************
+*************************************************************************************************************
+*************************************************************************************************************
+*************************************************************************************************************
+*************************************************************************************************************
+*************************************************************************************************************
+*************************************************************************************************************
+*************************************************************************************************************
+*************************************************************************************************************
+*************************************************************************************************************
+*************************************************************************************************************
+*************************************************************************************************************
+******************************************************************************************************************************************************************************************************************************************************************************************************************************************
+*************************************************************************************************************
