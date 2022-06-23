@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            background-color: skyblue;
+        }
+    </style>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>Welcome To The Tutorial Page({{app_name}}) of Django Master Cheat Sheet</h1>
+    <h2>The name of app is : ({{app_name}}) and the size is : ({{app_size}})</h2>
+
+<!---------------------------------------------------------------------------------------------------------->
+<!--------------------------------------if_tag in templates-------------------------------------------------->
+    <!--if tag-->
+    {% if app_name or app_created_on %}
+        <h1> Here one key exist in dictionary </h1>
+    {% endif %}
+    {% if app_name and app_size %}
+        <h1> Here both keys are available in dictionary </h1>
+    {% endif %}
+
+<!---------------------------------------------------------------------------------------------------------->
+<!--------------------------------------ForLoop in templates------------------------------------------------>
+    <!--ForLoop tag-->
+    {% for nm in names %}                               <!--here names is a key | and nm is a variable-->
+    {{nm}}<br>
+    {% endfor %}
+    <!---############################################################################################-->
+    <br>
+    <!--predefine ForLoop-->
+    {% for nm in names %}                               <!--here names is a key | and nm is a variable-->
+    {{forloop.counter}}{{nm}}<br>
+    {% endfor %}
+    <!--ForLoop with advance dictionary data-->
+    {% for stu in student %}                            <!--here student is key | and stu is variable-->
+    {{stu}}<br>
+    {% endfor %}
+    {{student}}
+    
+
+
+<!---------------------------------------------------------------------------------------------------------->
+<!----------------------------------------------static------------------------------------------------------>
+
+<!--
+#setting for static
+STATIC_DIR = BASE_DIR / 'static'
+STATIC_URL = 'static/'
+STATICFILES_DIRS = [STATIC_DIR] 
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<img src="{% static 'images/img.jpg' %}" alt="loveu">
+{% static "images/img.jpg" as mylove %}
+<img src="{{mylove}}" alt="">
+-->
+
+
+
+
+
+
+</body>
+</html>
