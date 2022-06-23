@@ -1,8 +1,8 @@
-
-#check version
-python --version
-pip --version
-django-admin --version
+----------------------------------------Check Version---------------------------------------------
+    #check version
+    python --version
+    pip --version
+    django-admin --version
 
 
 ------------------------------------------------------------------------------------------------
@@ -19,7 +19,7 @@ django-admin --version
 
 
 ---------------------------------------------------------------------------------------------------
-------------------------------------------setting--------------------------------------------------
+----------------------------------------setting--------------------------------------------------
 
     Debug = True    ---should true on developer site while should always false on server/production site
     ALLOWED_HOSTS = []  --- www.example.com
@@ -28,7 +28,7 @@ django-admin --version
 
 
 ---------------------------------------------------------------------------------------------------
----------------------------------------Default DATABASES-------------------------------------------
+----------------------------------------Default DATABASES-------------------------------------------
 
     DATABASES = {
         'default': {
@@ -52,7 +52,7 @@ django-admin --version
 
 
 -------------------------------------------------------------------------------------------------------
-----------------------------------------------admin.py-------------------------------------------------
+----------------------------------------admin.py-------------------------------------------------
     #admin.py 
     #Syntax
     from django.contrib import admin
@@ -76,24 +76,50 @@ django-admin --version
 
 
 -------------------------------------------------------------------------------------------------------
-------------------------------------------------view.py------------------------------------------------
-    from django.shortcuts import render
-    from django.http import HttpResponse
+----------------------------------------view.py------------------------------------------------
     #Syntax
+    #HttpResponse views.py (static)
+    from django.http import HttpResponse
     def function_name(request):
         return HttpResponse("Content")
     #Example
-    def index(request):
+    from django.http import HttpResponse
+    def static(request):
         return HttpResponse("Welcome To Homepage")
 
 
-    #for every view their should be URL with the name of view
+    ############################################################################################
+    #syntax
+    #render views.py (dynamic)                                  
+    from django.shortcuts import render
+    def function_name(request):
+        return render(request, template_name, context = dictionary_name, status=None, using=None)
+    #Example
+    from django.shortcuts import render
+    def dynamic(request):
+        return render(request, 'app_index.html')
+        return render(request, 'app/app_index.html')                    #for specifying the particular app folder 
+    #fNote: or every view their should be URL with the name of view
 
 
+    ############################################################################################
+    #sending context=dictionary{"key":"value"}
+    dict = {"app_name":"app2"}                                        #dictionary
+    return render(request, 'app/app_index.html', context=dict)        #pass 'dict_name' in context
+    <h2>The name of app is : {{app_name}}</h2>                        #access by key_name(app_name)
+
+    d = datetime.now()                                                #variable=value
+    return render(request, 'app/app_index.html', {'dt':d})            #direct pass key:value
+    <h1>{{dt}}</h1>                                                   #then access by key_name {{dt}}
+    #OR
+    date = {'dt':d}                                                   #make dictionary with value (d = datetime.now())
+    return render(request, 'app/app_index.html', date)                #and pass dictionary_name in context/directly
+    <h1>{{dt}}</h1>                                                   #then access by key_name {{dt}}
+    #Note: pass dictionary_name in context and operate by key_name in html_templates
 
 
 --------------------------------------------------------------------------------------------------------
---------------------------------------------------url.py------------------------------------------------
+----------------------------------------url.py------------------------------------------------
 
     from django.contrib import admin
     from django.urls import path, include
@@ -119,7 +145,7 @@ django-admin --version
 
 
 ------------------------------------------------------------------------------------------------------------
------------------------------------------------Templates----------------------------------------------------
+----------------------------------------Templates----------------------------------------------------
 
 
     #setting for templates
@@ -172,11 +198,14 @@ django-admin --version
 
         <h2>The name of app is : {{app_name}} and the size is : {{app_size}}</h2>               #finally access by key_name {{app_name}}
 
-        d = datetime.now() 
-        return render(request, 'app/app_index.html', {'dt':d})                #direct pass key:pair(dictionary)
-        date = {'dt':'d'}                                                     #or make dictionary 
-        return render(request, 'app/app_index.html', date)                    #and send dictionary_name in context
-        <h1>{{dt}}</h1>                                                       #finally access by key_name {{dt}}
+
+        d = datetime.now()                                                #variable=value
+        return render(request, 'app/app_index.html', {'dt':d})            #direct pass key:value
+        <h1>{{dt}}</h1>                                                   #then access by key_name {{dt}}
+        #OR
+        date = {'dt':d}                                                   #make dictionary with value (d = datetime.now())
+        return render(request, 'app/app_index.html', date)                #and pass dictionary_name in context/directly
+        <h1>{{dt}}</h1>                                                   #then access by key_name {{dt}}
 
 
 
@@ -350,7 +379,7 @@ django-admin --version
 
 
 --------------------------------------------------------------------------------------------------------------
-------------------------------------------Static Files--------------------------------------------------------
+----------------------------------------Static Files--------------------------------------------------------
 
     #setting for static
     TEMPLATE_DIR = BASE_DIR / 'templates'
@@ -409,7 +438,7 @@ django-admin --version
 
 
 --------------------------------------------------------------------------------------------------------------
--------------------------------------------------ORM----------------------------------------------------------
+----------------------------------------ORM----------------------------------------------------------
 
     #design of django model and use of query set
     #models.py
@@ -493,7 +522,7 @@ django-admin --version
 
 
 --------------------------------------------------------------------------------------------------------------
-------------------------------------------------crud operations-----------------------------------------------
+----------------------------------------crud operations-----------------------------------------------
 
     #To show models data on the templates pages
 
@@ -501,7 +530,7 @@ django-admin --version
 
 
 --------------------------------------------------------------------------------------------------------------
-------------------------------------------Cookies and Caches--------------------------------------------------
+----------------------------------------Cookies and Caches--------------------------------------------------
 
     #cache
         it stores on client side or user side .
@@ -515,7 +544,7 @@ django-admin --version
 
 
 --------------------------------------------------------------------------------------------------------------
------------------------------------------------ManytoMany Relation--------------------------------------------
+----------------------------------------ManytoMany Relation--------------------------------------------
 
     #for choosing multiple option at a time          <!--multiple skills for user-->
     #manytomany relation model-settings 

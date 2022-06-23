@@ -1,16 +1,15 @@
 from django.http import HttpResponse
 from django.shortcuts import render
+from app.models import *
 
 
-
-#----------------------------------------HttpResponse--------------------------------------------------------
+#-----------------------------------------------HttpResponse--------------------------------------------------------
 #return httpresponse 
 def app(request):
     return HttpResponse("Welcome to app1")
 
 
-
-#-----------------------------------------templates----------------------------------------------------------
+#------------------------------------------------templates----------------------------------------------------------
 #render html templates
 def index(request):
     #return HttpResponse("Welcome To Homepage of app")
@@ -19,8 +18,9 @@ def index(request):
     dict = {"app_name":"app2"}       #dictionary
     return render(request, 'app/app_index.html', context=dict)
 
+
 #######################################################################################################
-    #if tag
+#if tag
 def if_tag(request):
     app_name = 'app'
     app_size = '100%'
@@ -29,6 +29,7 @@ def if_tag(request):
     dictionary = {'an':app_name, 'az':app_size}
     dictionary2 = {'app_name':'shubham', 'app_size':'stable'}
     return render(request, 'app/app_index.html', context=dictionary2)
+
 
 ######################################################################################################
 #forloop tag
@@ -45,5 +46,10 @@ def forloop(request):
     return render(request, 'app/app_index.html', context = students)
 
 
-
-#--------------------------------------------models-------------------------------------------------------
+#-------------------------------------------------models-------------------------------------------------------
+#app/app.html
+def show_data(request):
+    stud_all = student.objects.all
+    stud = student.objects.get(pk=1)
+    print(stud)
+    return render(request, 'app/app_index.html', {'sti':stud, 'sta':stud_all})   

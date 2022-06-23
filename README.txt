@@ -13,7 +13,7 @@ git push origin master
 git status
 git add .
 git commit -m 'updates'
-git remote add origin https://github.com/shubham326/djangonotes.git       #update push on github
+*****git remote add origin https://github.com/shubham326/djangonotes.git      #update push on github
 git push -u origin master
 
 
