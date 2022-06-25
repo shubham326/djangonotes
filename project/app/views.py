@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from app.models import *
+from .forms import *
 
 
 #-----------------------------------------------HttpResponse--------------------------------------------------------
@@ -53,3 +54,17 @@ def show_data(request):
     stud = student.objects.get(pk=1)
     print(stud)
     return render(request, 'app/app_index.html', {'sti':stud, 'sta':stud_all})   
+
+
+#-------------------------------------------------form api-------------------------------------------------------
+#forms.py
+#from .forms import * 
+def stu_register(request):
+    #fm = student()                                                              #student is an here object
+    fm = student(auto_id=True, label_suffix=' ', initial={'name':'shubham'})     #auto_id refers to id , label changes the name, initial value
+    fm.order_fields(field_order=['email', 'name'])                               #ordering form fields
+    return render(request, 'app/app_index.html', {'from':fm})
+
+
+############################################################################################
+#Field Arguments

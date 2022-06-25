@@ -12,6 +12,9 @@
         th,td {
             border: 1px solid black;
         }
+        .helptext {
+            color: red;
+        }
     </style>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <title>Document</title>
@@ -114,6 +117,45 @@
                 </tr>
             </table>
         {% endif %}
+
+<!---------------------------------------------------------------------------------------------------------->
+<!--------------------------------------django Forms-------------------------------------------------->
+    <!--{{from}}-->
+    <form action="">
+        {{from.as_p}}
+        <input type="submit" value="Submit">
+    </form>
+        <!--
+            <br><hr><br>
+            <form action="">
+                {{from.as_table}}
+                <input type="submit" value="Submit">
+            </form>
+            <br><hr><br>
+            <form action="">
+                <table>
+                    {{from}}
+                </table>
+                <input type="submit" value="Submit">
+            </form>
+            <br><hr><br>
+            <form action="">
+                {{from.as_ul}}
+                <input type="submit" value="Submit">
+            </form>
+            <br><hr><br>
+            <form action="">
+                {{from.name}}
+                {{from.email}}
+                <input type="submit" value="Submit">
+            </form>
+        -->
+
+
+
+
+<!---------------------------------------------------------------------------------------------------------->
+<!----------------------------------------fields arguments-------------------------------------------------->
 
 </body>
 </html>

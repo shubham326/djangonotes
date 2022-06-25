@@ -7,5 +7,6 @@ urlpatterns = [
     path('app1', views.app),
     path('if/', views.if_tag),
     path('forloop/', views.forloop),
-    path('show_data/', views.show_data)
+    path('show_data/', views.show_data),
+    path("register/", views.stu_register),
 ]

@@ -1,8 +1,45 @@
+----------------------------------------Github commands-----------------------------------------
+    #git
+    #POST
+    select folder
+    git init
+    git add .
+    git commit -m 'first commit'
+    git remote add origin https://github.com/shubham326/djangonotes.git       #project post/upload on github
+    git push origin master
+
+    #Update
+    git status
+    git add .
+    git commit -m 'updates'
+    *****git remote add origin https://github.com/shubham326/djangonotes.git      #update push on github
+    git push -u origin master
+
+
+    #get 
+    git remote -v
+    git remote set-url origin
+    git remote -v                                                             #get project from github repository
+    git pull https://github.com/shubham326/djangonotes.git                  
+
+
+
+-------------------------------------------------------------------------------------------------
+----------------------------------------Requirements.txt------------------------------------
+    #requirements.txt
+    pip freeze                                                  #To see all dependencies
+    pip freeze > requirments.txt                                #To create requirements.txt
+    pip install -r requirements.txt                             #To install requirements.txt
+
+
+
+------------------------------------------------------------------------------------------------
 ----------------------------------------Check Version---------------------------------------------
     #check version
     python --version
     pip --version
     django-admin --version
+
 
 
 ------------------------------------------------------------------------------------------------
@@ -14,6 +51,7 @@
     python manage.py startapp name          ---or    django-admin startapp name
     python manage.py runserver 
     python manage.py runserver 5555         ---custom port 5555
+    python manage.py createsuperuser        #To create super user
     cd ..                                   #to come out from project folder 
 
 
@@ -51,12 +89,107 @@
 
 
 
+------------------------------------------------------------------------------------------------------
+----------------------------------------ORM Models----------------------------------------------------
+
+    #design of django model and use of query set
+    #models.py
+    #syntax 
+    from django.db import models
+    class model_name(models.Model):
+        field_name = models.FieldType(arg, options)                             #filed option (primary_key = True)
+        name = models.CharField(max_length=50, unique=True, primary_key=True)   #filed argument (max_length = 50)
+    #Example
+    from django.db import models
+    class skill(models.Model):
+        stud_id = models.IntegerField()
+        name = models.CharField(max_length=50)
+        def __str__(self):
+            return self.name
+        def __str__(self):
+            return str(self.stud_id)                                            #to convert int into str
+
+
+
+    ############################################################################################
+    # specifying choices
+    Roles = (
+        ("founder", "Founder"),
+        ("c", "C Suite"),
+        ("business_leader", "Business_leader"),
+        ("Manger", "Manager"),
+        ("Team_lead", "Team_lead"),
+    )
+
+
+    ############################################################################################
+    #custom user model using AbstractUser
+    from django.db import models
+    from django.contrib.auth.models import AbstractUser
+    from .manager import UserManager
+    class User(AbstractUser):
+        username = None 
+        email = models.EmailField(unique=True)
+        mobile = models.IntegerField()        
+        company_name = models.CharField(max_length=100)                            #in CharFiled length is required
+        company_website = models.URLField(max_length=100)
+        work_build = models.CharField(max_length=100, choices=work, default='Select')
+        role = models.CharField(max_length=50, choices=Roles, default='Find Your Role')
+        industry = models.CharField(max_length=100, choices=industry, default='Industry')
+        team_member = models.CharField(max_length=50, choices=Employees, default='Find Your Role')
+
+        objects = UserManager()
+        USERNAME_FIELD = 'email'
+        REQUIRED_FIELDS = []
+        def __str__(self):
+            return self.username
+
+
+
+    ############################################################################################
+    #migrations
+    #Syntax 
+    1. showmigartions :to display status of changes in models
+    2. makemigrations :use to convert model class into sql statements and also create a file contains all sql statements(0001),
+        located in application.
+    3. migrate :to execute sql commands and to create table in database.
+    4. sqlmigrate :to display sql statements
+    #Example
+    1. python manage.py showmigartions
+    2. python manage.py makemigrations
+    3. python manage.py migrate
+    4. python manage.py sqlmigrate app_name migration_filename(0001)
+    5.  python manage.py createsuperuser
+
+
+
+
+    ############################################################################################
+    #QuerySet
+        All objects created in django models
+        queryset allow to read the data from the database, filter it and order it.
+        user.objects.all()
+        users.objects.get(id=9)
+        users.objects.get(id=69)
+        users.objects.filter(name="shubham")
+
+
+
+
 -------------------------------------------------------------------------------------------------------
 ----------------------------------------admin.py-------------------------------------------------
     #admin.py 
     #Syntax
     from django.contrib import admin
     from .models import *
+    #Syntax
+    from django.contrib import admin
+    from .models import student
+    #admin.site.register(student)
+    #OR
+    @admin.register(student)
+    class studentAdmin(admin.ModelAdmin):
+        list_display = ('id','name','email','mobile_no')
     #Example
     from django.contrib import admin
     from .models import *
@@ -116,6 +249,7 @@
     return render(request, 'app/app_index.html', date)                #and pass dictionary_name in context/directly
     <h1>{{dt}}</h1>                                                   #then access by key_name {{dt}}
     #Note: pass dictionary_name in context and operate by key_name in html_templates
+
 
 
 --------------------------------------------------------------------------------------------------------
@@ -438,93 +572,117 @@
 
 
 --------------------------------------------------------------------------------------------------------------
-----------------------------------------ORM----------------------------------------------------------
+----------------------------------------crud operations-----------------------------------------------
 
-    #design of django model and use of query set
-    #models.py
-    #syntax 
-    from django.db import models
-    class model_name(models.Model):
-        field_name = models.FieldType(arg, options)                             #filed option (primary_key = True)
-        name = models.CharField(max_length=50, unique=True, primary_key=True)   #filed argument (max_length = 50)
-    #Example
-    from django.db import models
-    class skill(models.Model):
-        name = models.CharField(max_length=50)
-        def __str__(self):
-            return self.name
-
-
-
-    ############################################################################################
-    # specifying choices
-    Roles = (
-        ("founder", "Founder"),
-        ("c", "C Suite"),
-        ("business_leader", "Business_leader"),
-        ("Manger", "Manager"),
-        ("Team_lead", "Team_lead"),
-    )
-
-
-    ############################################################################################
-    #custom user model using AbstractUser
-    from django.db import models
-    from django.contrib.auth.models import AbstractUser
-    from .manager import UserManager
-    class User(AbstractUser):
-        username = None 
-        email = models.EmailField(unique=True)
-        mobile = models.IntegerField()        
-        company_name = models.CharField(max_length=100)                            #in CharFiled length is required
-        company_website = models.URLField(max_length=100)
-        work_build = models.CharField(max_length=100, choices=work, default='Select')
-        role = models.CharField(max_length=50, choices=Roles, default='Find Your Role')
-        industry = models.CharField(max_length=100, choices=industry, default='Industry')
-        team_member = models.CharField(max_length=50, choices=Employees, default='Find Your Role')
-
-        objects = UserManager()
-        USERNAME_FIELD = 'email'
-        REQUIRED_FIELDS = []
-        def __str__(self):
-            return self.username
-
-
-
-    ############################################################################################
-    #migrations
-    #Syntax 
-    1. showmigartions :to display status of changes in models
-    2. makemigrations :use to convert model class into sql statements and also create a file contains all sql statements(0001),
-        located in application.
-    3. migrate :to execute sql commands and to create table in database.
-    4. sqlmigrate :to display sql statements
-    #Example
-    1. python manage.py showmigartions
-    2. python manage.py makemigrations
-    3. python manage.py migrate
-    4. python manage.py sqlmigrate app_name migration_filename(0001)
-    5.  python manage.py createsuperuser
-
+    #crud operations
+    #GET
+    def show_data(request):
+    stud_all = student.objects.all                              #To get all data of model from database
+    stud = student.objects.get(pk=1)                            #To get single specific data of model from database
+    #print(stud)
+    return render(request, 'app/app_index.html', {'sti':stud, 'sta':stud_all}) #sending data to pages in the form of dict.
+    #show all data
+        {% if sta %}
+            <h1> show all data </h1>
+            <table>
+                <tr>
+                    <th>Id</th>
+                    <th>name</th>
+                    <th>email</th>
+                    <th>mobile</th>
+                    <th>company_name</th>
+                </tr>
+                {% for st in sta %}                              #use of for loop
+                <tr>
+                    <td>{{st.id}}</td>
+                    <td>{{st.name}}</td>
+                    <td>{{st.email}}</td>
+                    <td>{{st.mobile}}</td>
+                    <td>{{st.company_name}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+    #show single data
+        {% if sti %}
+            <h1> show single data </h1>
+            <table>
+                <tr>
+                    <th>Id</th>
+                    <th>name</th>
+                    <th>email</th>
+                    <th>mobile</th>
+                    <th>company_name</th>
+                </tr>
+                <tr>
+                    <td>{{sti.id}}</td>
+                    <td>{{sti.name}}</td>
+                    <td>{{sti.email}}</td>
+                    <td>{{sti.mobile}}</td>
+                    <td>{{sti.company_name}}</td>
+                </tr>
+            </table>
+        {% endif %}
 
 
 
     ############################################################################################
-    #QuerySet
-        All objects created in django models
-        queryset allow to read the data from the database, filter it and order it.
-        user.objects.all()
-        users.objects.get(id=9)
-        users.objects.get(id=69)
-        users.objects.filter(name="shubham")
+    #POST
 
 
 
 
 --------------------------------------------------------------------------------------------------------------
-----------------------------------------crud operations-----------------------------------------------
+----------------------------------------django Form-----------------------------------------------
 
-    #To show models data on the templates pages
+
+    #forms.py
+    from django import forms
+    class student(forms.Form):
+        name = forms.CharField(max_length=50)
+        email = forms.EmailField()
+    #views.py
+    from .forms import * 
+    def stu_register(request):
+    fm = student()                                                              #student is an here object
+    fm = student(auto_id=True, label_suffix=' ', initial={'name':'shubham'})    #auto_id refers to id , label changes the name, initial value
+    fm.order_fields(field_order=['email', 'name'])                              #ordering form fields
+    return render(request, app/app_index.html, {'from':fm})
+    #templates
+    #{{from}}
+        <form action="">
+            <table>
+                {{from}}
+            </table>
+            <input type="submit" value="Submit">
+        </form>
+
+
+
+    ############################################################################################
+    #Field Arguments
+    #forms.py
+    from django import forms
+    class student(forms.Form):
+        name = forms.CharField(
+                                max_length=50, 
+                                label='Your Name',
+                                label_suffix=' ',
+                                required=False,
+                                disabled=True,
+                                help_text='limit 70 char',
+                                )
+        email = forms.EmailField()
+
+
+
+    ############################################################################################
+    #Field Widgets
+
+
+
+
+
 
 
 
