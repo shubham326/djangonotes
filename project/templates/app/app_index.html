@@ -121,9 +121,12 @@
 <!---------------------------------------------------------------------------------------------------------->
 <!--------------------------------------django Forms-------------------------------------------------->
     <!--{{from}}-->
-    <form action="">
-        {{from.as_p}}
-        <input type="submit" value="Submit">
+    <form action="" method="POST">
+        {% csrf_token %}
+        {% if from %}
+            {{from.as_p}}
+            <input type="submit" value="Submit">
+        {% endif %}
     </form>
         <!--
             <br><hr><br>

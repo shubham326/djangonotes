@@ -24,6 +24,7 @@
 
 
 
+
 -------------------------------------------------------------------------------------------------
 ----------------------------------------Requirements.txt------------------------------------
     #requirements.txt
@@ -33,12 +34,14 @@
 
 
 
+
 ------------------------------------------------------------------------------------------------
 ----------------------------------------Check Version---------------------------------------------
     #check version
     python --version
     pip --version
     django-admin --version
+
 
 
 
@@ -53,6 +56,7 @@
     python manage.py runserver 5555         ---custom port 5555
     python manage.py createsuperuser        #To create super user
     cd ..                                   #to come out from project folder 
+
 
 
 
@@ -249,6 +253,7 @@
     return render(request, 'app/app_index.html', date)                #and pass dictionary_name in context/directly
     <h1>{{dt}}</h1>                                                   #then access by key_name {{dt}}
     #Note: pass dictionary_name in context and operate by key_name in html_templates
+
 
 
 
@@ -574,13 +579,15 @@
 --------------------------------------------------------------------------------------------------------------
 ----------------------------------------crud operations-----------------------------------------------
 
-    #crud operations
-    #GET
+    #GET    (using to show data from database to html page)
+    #views.py code                                              
     def show_data(request):
     stud_all = student.objects.all                              #To get all data of model from database
     stud = student.objects.get(pk=1)                            #To get single specific data of model from database
     #print(stud)
     return render(request, 'app/app_index.html', {'sti':stud, 'sta':stud_all}) #sending data to pages in the form of dict.
+
+    #Templates code
     #show all data
         {% if sta %}
             <h1> show all data </h1>
@@ -627,14 +634,35 @@
 
 
     ############################################################################################
-    #POST
+    #POST    (using to post data from html page)
+    #views.py                                                   
+    def post_data(request):
+    if request.method=='POST':                                          #To check method==POST,GET,PATCH,PUT,DELETE
+        fm = students(request.POST)                                     #To get form with data
+        if fm.is_valid():                                               #To validate data
+            print('Success Validation')
+            Name = fm.cleaned_data['name']                              #To get cleaned data
+            Email = fm.cleaned_data['email']
+            print('Name:', Name)
+            print('Email:', Email)
+        fm = students()
+    else:
+        fm = students()
+    return render(request, 'app/app_index.html', {'from':fm})
+
+    #Templates code
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{from.as_p}}
+        <input type="submit" value="Submit">
+    </form>
+
 
 
 
 
 --------------------------------------------------------------------------------------------------------------
 ----------------------------------------django Form-----------------------------------------------
-
 
     #forms.py
     from django import forms
@@ -644,8 +672,12 @@
     #views.py
     from .forms import * 
     def stu_register(request):
-    fm = student()                                                              #student is an here object
-    fm = student(auto_id=True, label_suffix=' ', initial={'name':'shubham'})    #auto_id refers to id , label changes the name, initial value
+    fm = student()                                                              #here student() is an object
+    fm = student(
+                auto_id=True,                                                   #auto_id changes id=filed_name
+                label_suffix=' ',                                               #label_suffix changes the ':'
+                initial={'name':'shubham'}                                      #initial value gives filed a initial value
+            )
     fm.order_fields(field_order=['email', 'name'])                              #ordering form fields
     return render(request, app/app_index.html, {'from':fm})
     #templates
@@ -675,14 +707,21 @@
         email = forms.EmailField()
 
 
-
     ############################################################################################
     #Field Widgets
-
-
-
-
-
+    #manly uses for CSS
+    #forms.py
+    name = forms.CharField(
+                            max_length=50, 
+                            label='Your Name',
+                            #widget=forms.PasswordInput(),
+                            #widget=forms.HiddenInput(),
+                            #widget=forms.Textarea(),
+                            #widget=forms.CheckboxInput(),
+                            #widget=forms.FileInput(),
+                            widget=forms.TextInput(attrs={'class':'css1', 'id':'unique_id'}),
+                            )
+    email = forms.EmailField()
 
 
 

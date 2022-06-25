@@ -47,7 +47,7 @@ def forloop(request):
     return render(request, 'app/app_index.html', context = students)
 
 
-#-------------------------------------------------models-------------------------------------------------------
+#-------------------------------------------------crud operations-------------------------------------------------------
 #app/app.html
 def show_data(request):
     stud_all = student.objects.all
@@ -56,15 +56,33 @@ def show_data(request):
     return render(request, 'app/app_index.html', {'sti':stud, 'sta':stud_all})   
 
 
-#-------------------------------------------------form api-------------------------------------------------------
-#forms.py
-#from .forms import * 
-def stu_register(request):
-    #fm = student()                                                              #student is an here object
-    fm = student(auto_id=True, label_suffix=' ', initial={'name':'shubham'})     #auto_id refers to id , label changes the name, initial value
-    fm.order_fields(field_order=['email', 'name'])                               #ordering form fields
+def post_data(request):
+    if request.method=='POST':
+        fm = students(request.POST)
+        if fm.is_valid():
+            print('Success Validation')
+            Name = fm.cleaned_data['name']
+            Email = fm.cleaned_data['email']
+            print('Name:', Name)
+            print('Email:', Email)
+        fm = students()
+    else:
+        fm = students()
     return render(request, 'app/app_index.html', {'from':fm})
 
 
-############################################################################################
-#Field Arguments
+#-------------------------------------------------form api-------------------------------------------------------
+#forms.py
+#from .forms import * 
+def stu_reg_form(request):
+    #fm = students()                                                              #student is an here object
+    fm = students(
+            auto_id=True,                                                        #auto_id changes id=filed_name
+            label_suffix=' ',                                                    #label_suffix changes the ':'
+            #initial={'name':'sweeta'}                                           #initial value gives filed a initial value
+        )
+    #fm.order_fields(field_order=['email', 'name'])                               #ordering form fields
+    return render(request, 'app/app_index.html', {'from':fm})
+
+
+#-------------------------------------------------form api-------------------------------------------------------
