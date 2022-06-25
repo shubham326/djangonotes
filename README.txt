@@ -1,4 +1,4 @@
-#update = 1
+#update = 2
 
 clear                                                                   #To clear all
 cd ..                                                                   #come back one folder
